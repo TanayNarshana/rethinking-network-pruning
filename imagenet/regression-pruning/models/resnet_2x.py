@@ -3,7 +3,6 @@ import pickle
 
 import torch.nn as nn
 import torch.utils.model_zoo as model_zoo
-from torch.autograd import Variable
 
 from channel_selection import *
 

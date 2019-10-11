@@ -8,8 +8,6 @@ import torch.nn.functional as F
 __all__ = ['densenet']
 
 
-from torch.autograd import Variable
-
 class Bottleneck(nn.Module):
     def __init__(self, inplanes, expansion=4, growthRate=12, dropRate=0):
         super(Bottleneck, self).__init__()

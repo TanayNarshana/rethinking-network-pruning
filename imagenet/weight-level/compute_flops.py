@@ -9,7 +9,6 @@ import warnings
 import torch
 import torchvision
 import torch.nn as nn
-from torch.autograd import Variable
 import torch.nn.parallel
 import torch.backends.cudnn as cudnn
 import torch.distributed as dist
@@ -120,7 +119,7 @@ def count_model_param_flops(model=None, input_res=224, multiply_adds=True):
     if model == None:
         model = torchvision.models.alexnet()
     foo(model)
-    input = Variable(torch.rand(3,input_res,input_res).unsqueeze(0), requires_grad = True)
+    input = torch.rand(3,input_res,input_res, requires_grad = True).unsqueeze(0)
     out = model(input)
 
 

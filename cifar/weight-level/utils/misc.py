@@ -7,7 +7,6 @@ import time
 import torch
 import torch.nn as nn
 import torch.nn.init as init
-from torch.autograd import Variable
 
 
 __all__ = ['get_mean_and_std', 'init_params', 'mkdir_p', 'AverageMeter']

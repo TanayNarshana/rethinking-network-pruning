@@ -2,7 +2,6 @@ import math
 
 import torch
 import torch.nn as nn
-from torch.autograd import Variable
 
 
 __all__ = ['vgg']
@@ -68,6 +67,6 @@ class vgg(nn.Module):
 
 if __name__ == '__main__':
     net = vgg()
-    x = Variable(torch.FloatTensor(16, 3, 40, 40))
+    x = torch.FloatTensor(16, 3, 40, 40)
     y = net(x)
     print(y.data.shape)

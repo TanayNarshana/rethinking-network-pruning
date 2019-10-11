@@ -12,7 +12,6 @@ import torch.nn as nn
 import math
 import torch.nn.functional as F
 from functools import partial
-from torch.autograd import Variable
 
 
 __all__ = ['resnet']
@@ -62,7 +61,7 @@ def downsample_basic_block(x, planes):
     if isinstance(x.data, torch.cuda.FloatTensor):
         zero_pads = zero_pads.cuda()
 
-    out = Variable(torch.cat([x.data, zero_pads], dim=1))
+    out = torch.cat([x.data, zero_pads], dim=1)
 
     return out
 
@@ -140,6 +139,6 @@ def resnet(**kwargs):
 
 if __name__ == '__main__':
     net = resnet(depth=56)
-    x=Variable(torch.FloatTensor(16, 3, 32, 32))
+    x=torch.FloatTensor(16, 3, 32, 32)
     y = net(x)
     print(y.data.shape)

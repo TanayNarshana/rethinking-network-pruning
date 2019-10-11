@@ -4,7 +4,6 @@ import numpy as np
 import torch
 import torchvision
 import torch.nn as nn
-from torch.autograd import Variable
 
 
 def print_model_param_nums(model=None, multiply_adds=True):
@@ -102,7 +101,7 @@ def print_model_param_flops(model=None, input_res=224, multiply_adds=True):
     if model == None:
         model = torchvision.models.alexnet()
     foo(model)
-    input = Variable(torch.rand(3, 3, input_res, input_res), requires_grad = True)
+    input = torch.rand(3, 3, input_res, input_res, requires_grad = True)
     out = model(input)
 
 

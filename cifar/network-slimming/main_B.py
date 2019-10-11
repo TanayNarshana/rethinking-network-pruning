@@ -163,7 +163,7 @@ def train(epoch):
                 epoch, batch_idx * len(data), len(train_loader.dataset),
                 100. * batch_idx / len(train_loader), loss.item()))
     history_score[epoch][0] = avg_loss / len(train_loader)
-    history_score[epoch][1] = train_acc / float(len(train_loader))
+    history_score[epoch][1] = train_acc / float(len(train_loader.dataset))
 
 def test():
     model.eval()
@@ -174,11 +174,11 @@ def test():
             data, target = data.cuda(), target.cuda()
         with torch.no_grad():
             output = model(data)
-            test_loss += F.cross_entropy(output, target, size_average=False).item() # sum up batch loss
+            test_loss += F.cross_entropy(output, target).item() # sum up batch loss
             pred = output.data.max(1, keepdim=True)[1] # get the index of the max log-probability
             correct += pred.eq(target.data.view_as(pred)).cpu().sum().item()
 
-    test_loss /= len(test_loader.dataset)
+    test_loss /= len(test_loader)
     print('\nTest set: Average loss: {:.4f}, Accuracy: {}/{} ({:.1f}%)\n'.format(
         test_loss, correct, len(test_loader.dataset),
         100. * correct / len(test_loader.dataset)))

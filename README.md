@@ -1,3 +1,5 @@
+While the original repository works in pytorch 0.3.1, the code in this repository works in pytorch >= 0.4.1.
+
 # Rethinking the Value of Network Pruning
 This repository contains the code for reproducing the results, and trained ImageNet models, in the following paper:  
 

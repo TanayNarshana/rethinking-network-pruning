@@ -203,7 +203,7 @@ def main():
     y, i = torch.sort(conv_weights)
     # thre_index = int(total * args.percent)
     thre_index = total - total_nonzero + int(total_nonzero * args.percent)
-    thre = y[int(thre_index)]
+    thre = y[int(thre_index)].cuda()
     pruned = 0
     print('Pruning threshold: {}'.format(thre))
     zero_flag = False

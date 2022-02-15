@@ -15,6 +15,7 @@ import torch.utils.data.distributed
 import torchvision.transforms as transforms
 import torchvision.datasets as datasets
 import torchvision.models as models
+from tqdm import tqdm
 
 from compute_flops import count_model_param_flops
 
@@ -110,7 +111,7 @@ def main():
     ratio = flops_std / flops_small
     if ratio >= 2:
         args.epochs = 180
-        stepz_size = 60
+        step_size = 60
     else:
         args.epochs = int(90.*flops_std / flops_small)
         step_size = int(args.epochs / 3)
@@ -220,7 +221,7 @@ def train(train_loader, model, criterion, optimizer, epoch):
     model.train()
 
     end = time.time()
-    for i, (input, target) in enumerate(train_loader):
+    for i, (input, target) in enumerate(tqdm(train_loader)):
         # measure data loading time
         data_time.update(time.time() - end)
 
@@ -244,6 +245,9 @@ def train(train_loader, model, criterion, optimizer, epoch):
         # measure elapsed time
         batch_time.update(time.time() - end)
         end = time.time()
+
+        del loss
+        del output
 
         if i % args.print_freq == 0:
             print('Epoch: [{0}][{1}/{2}]\t'
@@ -336,7 +340,7 @@ def accuracy(output, target, topk=(1,)):
 
     res = []
     for k in topk:
-        correct_k = correct[:k].view(-1).float().sum(0, keepdim=True)
+        correct_k = correct[:k].reshape(-1).float().sum(0, keepdim=True)
         res.append(correct_k.mul_(100.0 / batch_size))
     return res
 

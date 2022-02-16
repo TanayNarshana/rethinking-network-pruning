@@ -224,6 +224,8 @@ def train(train_loader, model, criterion, optimizer, epoch):
         batch_time.update(time.time() - end)
         end = time.time()
 
+        del loss, output
+
         if i % args.print_freq == 0:
             print('Epoch: [{0}][{1}/{2}]\t'
                   'Time {batch_time.val:.3f} ({batch_time.avg:.3f})\t'
@@ -233,6 +235,8 @@ def train(train_loader, model, criterion, optimizer, epoch):
                   'Prec@5 {top5.val:.3f} ({top5.avg:.3f})'.format(
                    epoch, i, len(train_loader), batch_time=batch_time,
                    data_time=data_time, loss=losses, top1=top1, top5=top5))
+
+    del batch_time, data_time, losses, top1, top5
 
 def validate(val_loader, model, criterion):
     batch_time = AverageMeter()
@@ -262,6 +266,8 @@ def validate(val_loader, model, criterion):
             batch_time.update(time.time() - end)
             end = time.time()
 
+            del loss, output
+
             if i % args.print_freq == 0:
                 print('Test: [{0}/{1}]\t'
                     'Time {batch_time.val:.3f} ({batch_time.avg:.3f})\t'
@@ -273,8 +279,9 @@ def validate(val_loader, model, criterion):
 
     print(' * Prec@1 {top1.avg:.3f} Prec@5 {top5.avg:.3f}'
           .format(top1=top1, top5=top5))
-
-    return top1.avg
+    res = top1.avg
+    del batch_time, losses, top1, top5
+    return res
 
 def save_checkpoint(state, is_best, filepath, name='checkpoint.pth.tar'):
     torch.save(state, os.path.join(filepath, name))
@@ -315,7 +322,7 @@ def accuracy(output, target, topk=(1,)):
 
     res = []
     for k in topk:
-        correct_k = correct[:k].view(-1).float().sum(0, keepdim=True)
+        correct_k = correct[:k].reshape(-1).float().sum(0, keepdim=True)
         res.append(correct_k.mul_(100.0 / batch_size))
     return res
 

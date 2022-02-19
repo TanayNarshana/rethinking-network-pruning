@@ -15,6 +15,7 @@ import torch.utils.data.distributed
 import torchvision.transforms as transforms
 import torchvision.datasets as datasets
 import torchvision.models as models
+from tqdm import tqdm
 
 from compute_flops import count_model_param_flops
 
@@ -171,7 +172,8 @@ def main():
     if args.evaluate:
         validate(val_loader, model, criterion)
         return
-
+    
+    print("Training for {} epochs.".format(args.epochs))
     for epoch in range(args.start_epoch, args.epochs):
         if args.distributed:
             train_sampler.set_epoch(epoch)
@@ -205,7 +207,7 @@ def train(train_loader, model, criterion, optimizer, epoch):
     model.train()
 
     end = time.time()
-    for i, (input, target) in enumerate(train_loader):
+    for i, (input, target) in enumerate(tqdm(train_loader)):
         # measure data loading time
         data_time.update(time.time() - end)
 
@@ -321,7 +323,7 @@ def accuracy(output, target, topk=(1,)):
 
     res = []
     for k in topk:
-        correct_k = correct[:k].view(-1).float().sum(0, keepdim=True)
+        correct_k = correct[:k].reshape(-1).float().sum(0, keepdim=True)
         res.append(correct_k.mul_(100.0 / batch_size))
     return res
 

@@ -4,7 +4,7 @@ import pickle
 import torch.nn as nn
 import torch.utils.model_zoo as model_zoo
 
-from channel_selection import *
+from models.channel_selection import *
 
 
 __all__ = ['resnet_2x']
